@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+#encoding: utf-8
+
+require 'optparse'
+require 'pp'
+require 'photo_party_sync/card.rb'
+
+@options = {}
+@options[:quiet] = false
+#@options[:verbose] = false
+@options[:cards] = []
+
+optparse = OptionParser.new do|opts|
+  opts.banner = "Usage: upload_files.rb [options]\nDefault host: #{@options[:server]}"
+
+  opts.on('-q', '--quiet', 'Only output error messages') do
+    @options[:quiet] = true
+  end
+
+  #opts.on("-v", "--verbose", "Show extra output") do
+  #	@options[:verbose] = true
+  #end
+
+  opts.on('-c [CARD]', '--card [CARD]', 'Name of the card to parse') do |card|
+    @options[:cards] << card
+  end
+
+  opts.on('-f [CARD]', '--card-file [CARD]', 'Name of the card file to parse') do |card|
+    @options[:cards] = open(card).read.split("\n")
+  end
+end
+optparse.parse!
+
+if @options[:cards].empty?
+  puts 'You need to supply a card name.'
+  exit 1
+end
+
+@options[:cards].each do |cardname|
+  card = Card.new(cardname)
+
+  if card.ready?
+
+    puts "Found #{cardname}, getting file list..." unless @options[:quiet]
+
+    card.files.each do |file|
+      if file.valid? and not file.exists?
+        puts "Downloading #{file.name}..." unless @options[:quiet]
+        file.download
+      else
+        puts "Skipping file #{file.name}..."
+      end
+    end
+  else
+    puts "Cannot reach #{cardname}. Skipping." unless @options[:quiet]
+  end
+end
