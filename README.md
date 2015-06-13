@@ -1,38 +1,47 @@
 # PhotoPartySync
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/photo_party_sync`. To experiment with that code, run `bin/console` for an interactive prompt.
+PhotoPartySync is a small gem that scans for given sd cards in the network and downloads all available images to
+your local machine.
 
-TODO: Delete this and the text above, and describe your gem
+# Why?
+
+For example at a wedding or a party you give out some wireless sd cards to your guests. They put them in their cameras
+and all their photos at the event will be collected by one computer which can display them in a slideshow.
+
+## Requirements
+
+You need sd card compatible with the Toshiba Flash Air card.
 
 ## Installation
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'photo_party_sync'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
 
     $ gem install photo_party_sync
 
 ## Usage
 
-TODO: Write usage instructions here
+Run
 
-## Development
+    $ photo_party_sync --help
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
+to get a list of options. You need to know the IP address of your sd card(s). Run
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release` to create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+    $ photo_party_sync --card <ip>
+
+to let the script check for a card. It can take a while for the card to login into your network. If you have
+multiple cards, you can add all of them to a text file and supply this file to photo_party_sync.
+
+    $ photo_party_sync --card-file <filename>
+
+The parameter --watch will let the script keep polling all cards and download all new images once the appear.
+
+    $ photo_party_sync --card <ip> --watch
+
+**HINT:** You can add all your cards addresses to your host file (/etc/hosts on Linux/Mac) to have nive names for them.
+ These names can be used in the card parameter or the list file. This is especially helpful since photo_party_sync uses
+ these names as folders to separate the images.
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/photo_party_sync/fork )
+1. Fork it ( https://github.com/kayssun/photo_party_sync/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
