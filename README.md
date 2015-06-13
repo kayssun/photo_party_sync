@@ -8,9 +8,12 @@ your local machine.
 For example at a wedding or a party you give out some wireless sd cards to your guests. They put them in their cameras
 and all their photos at the event will be collected by one computer which can display them in a slideshow.
 
+This slideshow is not part of this gem. I plan to publish my implementation later here on github.
+
 ## Requirements
 
-You need sd card compatible with the Toshiba Flash Air card.
+You need an sd card compatible with the "Toshiba Flash Air" card. These need to be preconfigured to log into
+your existing access point.
 
 ## Installation
 
@@ -35,7 +38,7 @@ The parameter --watch will let the script keep polling all cards and download al
 
     $ photo_party_sync --card <ip> --watch
 
-**HINT:** You can add all your cards addresses to your host file (/etc/hosts on Linux/Mac) to have nive names for them.
+**HINT:** You can add all your cards addresses to your host file (/etc/hosts on Linux/Mac) to have nice names for them.
  These names can be used in the card parameter or the list file. This is especially helpful since photo_party_sync uses
  these names as folders to separate the images.
 
