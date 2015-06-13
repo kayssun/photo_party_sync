@@ -8,3 +8,6 @@
 /spec/reports/
 /tmp/
 /.idea/
+
+# Temporary images during testing
+/images
