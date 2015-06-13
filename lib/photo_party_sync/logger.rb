@@ -1,6 +1,7 @@
 require 'logger'
 
 module PhotoPartySync
+  # Global logging module
   module Logging
     def logger
       Logging.logger

@@ -1,29 +1,28 @@
 #!/usr/bin/env ruby
-#encoding: utf-8
+# encoding: utf-8
 
 require 'optparse'
-require 'pp'
 require 'photo_party_sync'
 
 options = {}
 options[:quiet] = false
-#options[:verbose] = false
+# options[:verbose] = false
 options[:cards] = []
 options[:dir] = ''
 options[:watch] = false
 
-optparse = OptionParser.new do|opts|
+optparse = OptionParser.new do |opts|
   opts.banner = "Usage: upload_files.rb [options]\nDefault host: #{options[:server]}"
 
   opts.on('-q', '--quiet', 'Only output error messages') do
     options[:quiet] = true
   end
 
-  #opts.on("-v", "--verbose", "Show extra output") do
-  #	@options[:verbose] = true
-  #end
+  # opts.on("-v", "--verbose", "Show extra output") do
+  # 	@options[:verbose] = true
+  # end
 
-  opts.on('--watch', 'Run forever an keep watching for available cards') do |card|
+  opts.on('--watch', 'Run forever an keep watching for available cards') do
     options[:watch] = true
   end
 

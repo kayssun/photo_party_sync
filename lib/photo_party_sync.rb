@@ -3,6 +3,7 @@ require 'photo_party_sync/card'
 require 'photo_party_sync/logger'
 
 module PhotoPartySync
+  # Calls all cards
   class Watcher
     include PhotoPartySync::Logging
 

@@ -4,6 +4,7 @@ require 'open-uri'
 require 'photo_party_sync/cardfile.rb'
 
 module PhotoPartySync
+  # Represents a remote sd card - sets up connects and gets file list
   class Card
     attr_accessor :target_base_path
     attr_reader :name
@@ -23,25 +24,15 @@ module PhotoPartySync
     end
 
     def read_folders
-      begin
-        doc = Nokogiri::HTML(open("http://#{@name}/command.cgi?op=100&DIR=/DCIM", read_timeout: 2))
-      rescue Exception => e
-        logger.warn e.message
-        return []
-      end
-      folder_list = doc.css('p').first.content.split("\n")
-      folder_list.shift
-      folder_list.collect{|row| row.split(',')[1]}
+      folder_list = entry_list('/DCIM')
+      folder_list.collect { |row| row.split(',')[1] }
     end
 
     def files
       found_files = []
 
       folders.each do |folder|
-
-        doc = Nokogiri::HTML(open("http://#{@name}/command.cgi?op=100&DIR=/DCIM/#{folder}"))
-        file_list = doc.css('p').first.content.split("\n")
-        file_list.shift
+        file_list = entry_list("/DCIM/#{folder}")
         file_list.each do |file_row|
           file_info = file_row.split ','
           file = CardFile.new
@@ -62,7 +53,7 @@ module PhotoPartySync
 
     def download_all
       files.each do |file|
-        if file.valid? && !file.exists?
+        if file.valid? && !file.exist?
           logger.info "Downloading #{file.name}..." unless @options[:quiet]
           file.download
         else
@@ -72,12 +63,22 @@ module PhotoPartySync
     end
 
     def valid?
-      begin
-        open("http://#{@options[:card]}/command.cgi?op=100&DIR=/DCIM")
-        true
-      rescue SocketError
-        false
-      end
+      open("http://#{@options[:card]}/command.cgi?op=100&DIR=/DCIM")
+      true
+    rescue SocketError
+      false
+    end
+
+    protected
+
+    def entry_list(folder)
+      doc = Nokogiri::HTML(open("http://#{@name}/command.cgi?op=100&DIR=#{folder}", read_timeout: 2))
+      entries = doc.css('p').first.content.split("\n")
+      entries.shift
+      entries
+    rescue StandardError => e
+      logger.warn e.message
+      []
     end
   end
 end
