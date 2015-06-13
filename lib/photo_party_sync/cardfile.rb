@@ -14,7 +14,7 @@ module PhotoPartySync
     MINUTE_MASK = 0b0000011111100000
     SECOND_MASK = 0b0000000000011111
 
-    BASE_PATH   = File.realdirpath(File.dirname(__FILE__) + '/images')
+    BASE_PATH   = File.realdirpath('images')
 
     attr_accessor :path, :name, :size, :attributes, :card, :target_base_path
 
