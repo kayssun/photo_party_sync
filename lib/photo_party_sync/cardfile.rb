@@ -14,9 +14,9 @@ module PhotoPartySync
     MINUTE_MASK = 0b0000011111100000
     SECOND_MASK = 0b0000000000011111
 
-    BASE_PATH   = File.dirname(File.dirname(__FILE__)) + '/jsfunshow/public/images'
+    BASE_PATH   = File.realdirpath(File.dirname(__FILE__) + '/images')
 
-    attr_accessor :path, :name, :size, :attributes, :card
+    attr_accessor :path, :name, :size, :attributes, :card, :target_base_path
 
     def initialize
       @path = ''
@@ -24,6 +24,7 @@ module PhotoPartySync
       @size = ''
       @attributes = ''
       @card = ''
+      @target_base_path = BASE_PATH
     end
 
     def to_s
@@ -39,7 +40,7 @@ module PhotoPartySync
     end
 
     def local_path
-      CardFile::BASE_PATH + "/#{card}/#{local_filename}"
+      @target_base_path + "/#{card}/#{local_filename}"
     end
 
     def date
