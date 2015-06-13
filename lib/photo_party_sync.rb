@@ -15,6 +15,7 @@ module PhotoPartySync
     def watch
       while true
         check_all
+        sleep 1
       end
     end
 

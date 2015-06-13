@@ -10,6 +10,7 @@ options[:quiet] = false
 #options[:verbose] = false
 options[:cards] = []
 options[:dir] = ''
+options[:watch] = false
 
 optparse = OptionParser.new do|opts|
   opts.banner = "Usage: upload_files.rb [options]\nDefault host: #{options[:server]}"
@@ -21,6 +22,10 @@ optparse = OptionParser.new do|opts|
   #opts.on("-v", "--verbose", "Show extra output") do
   #	@options[:verbose] = true
   #end
+
+  opts.on('--watch', 'Run forever an keep watching for available cards') do |card|
+    options[:watch] = true
+  end
 
   opts.on('-c [CARD]', '--card [CARD]', 'Name of the card to parse') do |card|
     options[:cards] << card
