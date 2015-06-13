@@ -10,7 +10,8 @@ Gem::Specification.new do |spec|
   spec.email         = ['gerrit@visscher.de']
 
   spec.summary       = 'Copies images from wireless sd cards to the local machine'
-  # spec.description   = ''
+  spec.description   = 'PhotoPartySync is a small gem that scans for given sd cards in the network and downloads'\
+                       'all available images to your local machine.'
   spec.homepage      = 'https://github.com/kayssun/photo_party_sync'
   spec.license       = 'MIT'
 
@@ -22,5 +23,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler', '~> 1.9'
   spec.add_development_dependency 'rake', '~> 10.0'
 
-  spec.add_dependency 'nokogiri'
+  spec.add_dependency 'nokogiri', '~> 1'
 end

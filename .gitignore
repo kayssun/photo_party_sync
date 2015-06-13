@@ -8,6 +8,7 @@
 /spec/reports/
 /tmp/
 /.idea/
+/photo_party_sync-*.gem
 
 # Temporary images during testing
 /images
