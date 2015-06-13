@@ -74,7 +74,7 @@ module PhotoPartySync
     end
 
     def download
-      # puts "Downloading: http://#{card}#{path}/#{name}"
+      # logger.info "Downloading: http://#{card}#{path}/#{name}"
       FileUtils.mkdir_p(File.dirname(temp_path)) unless Dir.exists?(File.dirname(temp_path))
       FileUtils.mkdir_p(File.dirname(local_path)) unless Dir.exists?(File.dirname(local_path))
       continue = File.exists?(temp_path) ? ' --continue' : ''

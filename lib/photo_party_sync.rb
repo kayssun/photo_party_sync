@@ -1,19 +1,24 @@
 require 'photo_party_sync/version'
 require 'photo_party_sync/card'
+require 'photo_party_sync/logger'
 
 module PhotoPartySync
   class Watcher
-    def initialize(options)
-      @options = options
+    include PhotoPartySync::Logging
 
-      if @options[:cards].empty?
-        puts 'You need to supply a card name.'
+    def initialize(options)
+      if options[:cards].empty?
+        STDERR.puts 'You need to supply a card name.'
         exit 1
       end
+
+      @options = options
+
+      @options[:cards].each { |card| card.target_base_path = @options[:dir] } unless @options[:dir].empty?
     end
 
     def watch
-      while true
+      loop do
         check_all
         sleep 1
       end
@@ -25,24 +30,12 @@ module PhotoPartySync
       end
     end
 
-    def check_card(cardname)
-      card = PhotoPartySync::Card.new(cardname)
-
+    def check_card(card)
       if card.ready?
-
-        puts "Found #{cardname}, getting file list..." unless @options[:quiet]
-
-        card.files.each do |file|
-          file.target_base_dir = @options[:dir] unless @options[:dir].empty?
-          if file.valid? and not file.exists?
-            puts "Downloading #{file.name}..." unless @options[:quiet]
-            file.download
-          else
-            puts "Skipping file #{file.name}..."
-          end
-        end
+        logger.info "Found #{card.name}, getting file list..." unless @options[:quiet]
+        card.download_all
       else
-        puts "Cannot reach #{cardname}. Skipping." unless @options[:quiet]
+        logger.warn "Cannot reach #{card.name}. Skipping." unless @options[:quiet]
       end
     end
   end

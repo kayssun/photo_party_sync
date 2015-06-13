@@ -28,11 +28,11 @@ optparse = OptionParser.new do|opts|
   end
 
   opts.on('-c [CARD]', '--card [CARD]', 'Name of the card to parse') do |card|
-    options[:cards] << card
+    options[:cards] << PhotoPartySync::Card.new(card)
   end
 
   opts.on('-f [CARD]', '--card-file [CARD]', 'Name of the card file to parse (one card per line)') do |card|
-    options[:cards] = open(card).read.split("\n")
+    options[:cards] = open(card).read.split("\n").collect { |name| PhotoPartySync::Card.new(name) }
   end
 
   opts.on('-d [DIR]', '--directory [DIR]', 'Directory to where the files are downloaded') do |dir|

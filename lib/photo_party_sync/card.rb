@@ -1,13 +1,14 @@
+require 'photo_party_sync/logger'
+require 'nokogiri'
+require 'open-uri'
+require 'photo_party_sync/cardfile.rb'
+
 module PhotoPartySync
-
-  #!/usr/bin/ruby
-  #encoding: utf-8
-
-  require 'nokogiri'
-  require 'open-uri'
-  require 'photo_party_sync/cardfile.rb'
-
   class Card
+    attr_accessor :target_base_path
+    attr_reader :name
+
+    include PhotoPartySync::Logging
 
     def initialize(name)
       @name = name
@@ -25,7 +26,7 @@ module PhotoPartySync
       begin
         doc = Nokogiri::HTML(open("http://#{@name}/command.cgi?op=100&DIR=/DCIM", read_timeout: 2))
       rescue Exception => e
-        puts e.message
+        logger.warn e.message
         return []
       end
       folder_list = doc.css('p').first.content.split("\n")
@@ -42,7 +43,6 @@ module PhotoPartySync
         file_list = doc.css('p').first.content.split("\n")
         file_list.shift
         file_list.each do |file_row|
-          #puts file_row
           file_info = file_row.split ','
           file = CardFile.new
           file.path = file_info[0]
@@ -51,12 +51,24 @@ module PhotoPartySync
           file.attributes = file_info[3]
           file.date = file_info[4].to_i
           file.time = file_info[5].to_i
+          file.target_base_path = @target_base_path
           file.card = @name
           found_files << file
         end
       end
 
       found_files
+    end
+
+    def download_all
+      files.each do |file|
+        if file.valid? && !file.exists?
+          logger.info "Downloading #{file.name}..." unless @options[:quiet]
+          file.download
+        else
+          logger.info "Skipping file #{file.name}..."
+        end
+      end
     end
 
     def valid?
