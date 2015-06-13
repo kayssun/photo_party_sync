@@ -79,7 +79,7 @@ module PhotoPartySync
       FileUtils.mkdir_p(File.dirname(local_path)) unless Dir.exists?(File.dirname(local_path))
       continue = File.exists?(temp_path) ? ' --continue' : ''
       timeout = ' --timeout=5'
-      success = system("wget 'http://#{card}#{path}/#{name}' -O '#{temp_path}'#{continue}#{timeout} --dns-timeout=1")
+      success = system("wget 'http://#{card}#{path}/#{name}' -O '#{temp_path}'#{continue}#{timeout} --tries=1 --dns-timeout=1")
       if success
         FileUtils.mv(temp_path, local_path)
       end
