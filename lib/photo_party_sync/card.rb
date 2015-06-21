@@ -54,7 +54,7 @@ module PhotoPartySync
     def download_all
       files.each do |file|
         if file.valid? && !file.exist?
-          logger.info "Downloading #{file.name}..." unless @options[:quiet]
+          logger.info "Downloading #{file.name}..."
           file.download
         else
           logger.info "Skipping file #{file.name}..."
