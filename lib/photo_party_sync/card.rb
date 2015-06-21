@@ -42,7 +42,7 @@ module PhotoPartySync
           file.attributes = file_info[3]
           file.date = file_info[4].to_i
           file.time = file_info[5].to_i
-          file.target_base_path = @target_base_path
+          file.target_base_path = @target_base_path if @target_base_path
           file.card = @name
           found_files << file
         end
